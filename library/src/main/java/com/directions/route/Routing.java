@@ -18,6 +18,7 @@ public class Routing extends AbstractRouting {
     private final int avoidKinds;
     private final boolean optimize;
     private final String language;
+    private final boolean via;
     private final String key;
 
     private Routing(Builder builder) {
@@ -28,6 +29,7 @@ public class Routing extends AbstractRouting {
         this.optimize = builder.optimize;
         this.alternativeRoutes = builder.alternativeRoutes;
         this.language = builder.language;
+        this.via = builder.via;
         this.key = builder.key;
     }
 
@@ -54,7 +56,8 @@ public class Routing extends AbstractRouting {
                 stringBuilder.append("optimize:true|");
             for (int i = 1; i < waypoints.size() - 1; i++) {
                 final WayPoint p = waypoints.get(i);
-                stringBuilder.append("via:"); // we don't want to parse the resulting JSON for 'legs'.
+                if (via)
+                    stringBuilder.append("via:"); // we don't want to parse the resulting JSON for 'legs'.
                 stringBuilder.append(p.render());
                 stringBuilder.append('|');
             }
@@ -94,6 +97,7 @@ public class Routing extends AbstractRouting {
         private RoutingListener listener;
         private boolean optimize;
         private String language;
+        private boolean via;
         private String key;
 
         public Builder () {
@@ -104,6 +108,7 @@ public class Routing extends AbstractRouting {
             this.listener = null;
             this.optimize = false;
             this.language = null;
+            this.via = true;
             this.key = null;
         }
 
@@ -142,6 +147,11 @@ public class Routing extends AbstractRouting {
 
         public Builder language (String language) {
             this.language = language;
+            return this;
+        }
+
+        public Builder via (boolean via) {
+            this.via = via;
             return this;
         }
 
