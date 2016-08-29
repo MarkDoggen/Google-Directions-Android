@@ -14,7 +14,7 @@ public class Routing extends AbstractRouting {
 
     private final TravelMode travelMode;
     private final boolean  alternativeRoutes;
-    private final List<LatLng> waypoints;
+    private final List<WayPoint> waypoints;
     private final int avoidKinds;
     private final boolean optimize;
     private final String language;
@@ -35,18 +35,14 @@ public class Routing extends AbstractRouting {
         final StringBuilder stringBuilder = new StringBuilder(AbstractRouting.DIRECTIONS_API_URL);
 
         // origin
-        final LatLng origin = waypoints.get(0);
+        final WayPoint origin = waypoints.get(0);
         stringBuilder.append("origin=")
-                .append(origin.latitude)
-                .append(',')
-                .append(origin.longitude);
+                .append(origin.render());
 
         // destination
-        final LatLng destination = waypoints.get(waypoints.size() - 1);
+        final WayPoint destination = waypoints.get(waypoints.size() - 1);
         stringBuilder.append("&destination=")
-                .append(destination.latitude)
-                .append(',')
-                .append(destination.longitude);
+                .append(destination.render());
 
         // travel
         stringBuilder.append("&mode=").append(travelMode.getValue());
@@ -57,11 +53,9 @@ public class Routing extends AbstractRouting {
             if(optimize)
                 stringBuilder.append("optimize:true|");
             for (int i = 1; i < waypoints.size() - 1; i++) {
-                final LatLng p = waypoints.get(i);
+                final WayPoint p = waypoints.get(i);
                 stringBuilder.append("via:"); // we don't want to parse the resulting JSON for 'legs'.
-                stringBuilder.append(p.latitude);
-                stringBuilder.append(',');
-                stringBuilder.append(p.longitude);
+                stringBuilder.append(p.render());
                 stringBuilder.append('|');
             }
         }
@@ -95,7 +89,7 @@ public class Routing extends AbstractRouting {
 
         private TravelMode travelMode;
         private boolean alternativeRoutes;
-        private List<LatLng> waypoints;
+        private List<WayPoint> waypoints;
         private int avoidKinds;
         private RoutingListener listener;
         private boolean optimize;
@@ -123,13 +117,13 @@ public class Routing extends AbstractRouting {
             return this;
         }
 
-        public Builder waypoints (LatLng... points) {
+        public Builder waypoints (WayPoint... points) {
             waypoints.clear();
             Collections.addAll(waypoints, points);
             return this;
         }
 
-        public Builder waypoints (List<LatLng> waypoints) {
+        public Builder waypoints (List<WayPoint> waypoints) {
             this.waypoints = new ArrayList<>(waypoints);
             return this;
         }

@@ -20,6 +20,7 @@ import com.directions.route.Route;
 import com.directions.route.RouteException;
 import com.directions.route.Routing;
 import com.directions.route.RoutingListener;
+import com.directions.route.WayPoint;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
@@ -355,7 +356,7 @@ public class MainActivity extends AppCompatActivity implements RoutingListener, 
                     .travelMode(AbstractRouting.TravelMode.DRIVING)
                     .withListener(this)
                     .alternativeRoutes(true)
-                    .waypoints(start, end)
+                    .waypoints(new WayPoint(start), new WayPoint(end))
                     .build();
             routing.execute();
         }
