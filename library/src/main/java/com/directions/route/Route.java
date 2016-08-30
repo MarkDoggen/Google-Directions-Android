@@ -11,7 +11,7 @@ import java.util.List;
 public class Route {
     private String name;
     private final List<LatLng> points;
-    private List<Segment> segments;
+    private List<Leg> legs;
     private String copyright;
     private String warning;
     private String country;
@@ -57,12 +57,32 @@ public class Route {
         this.distanceText = distanceText;
     }
 
-    public int getDurationValue() {
-        return durationValue;
+    public int calculateDurationValue() {
+        int duration = 0;
+        for (Leg leg : getLegs()){
+            duration += leg.getDuration().getValue();
+        }
+        return duration;
     }
 
     public void setDurationValue(int durationValue) {
         this.durationValue = durationValue;
+    }
+
+    public void addDurationValue(int durationValue){
+        this.durationValue += durationValue;
+    }
+
+    public int calculateDistanceValue() {
+        int distance = 0;
+        for (Leg leg : getLegs()){
+            distance +=leg.getDistance().getValue();
+        }
+        return distance;
+    }
+
+    public int getDurationValue() {
+        return durationValue;
     }
 
     public int getDistanceValue() {
@@ -73,13 +93,17 @@ public class Route {
         this.distanceValue = distanceValue;
     }
 
-    public void setSegments(List<Segment> segments) {
-        this.segments = segments;
+    public void addDistanceValue(int distanceValue){
+        this.distanceValue += distanceValue;
+    }
+
+    public void setLegs(List<Leg> legs) {
+        this.legs = legs;
     }
 
     public Route() {
         points = new ArrayList<LatLng>();
-        segments = new ArrayList<Segment>();
+        legs = new ArrayList<Leg>();
     }
 
     public void addPoint(final LatLng p) {
@@ -94,12 +118,12 @@ public class Route {
         return points;
     }
 
-    public void addSegment(final Segment s) {
-        segments.add(s);
+    public void addLeg(final Leg l) {
+        legs.add(l);
     }
 
-    public List<Segment> getSegments() {
-        return segments;
+    public List<Leg> getLegs() {
+        return legs;
     }
 
     /**
